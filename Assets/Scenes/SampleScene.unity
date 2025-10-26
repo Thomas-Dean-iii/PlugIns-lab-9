@@ -202,7 +202,7 @@ GameObject:
   - component: {fileID: 307649833}
   m_Layer: 0
   m_Name: EnemySpawner
-  m_TagString: Untagged
+  m_TagString: Spawner
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -225,10 +225,10 @@ MonoBehaviour:
   minY: 3
   maxY: 6
   patrolDistance: 2
-  minSpawnDelay: 1
-  maxSpawnDelay: 5
   minSpeed: 1.5
   maxSpeed: 3
+  minSpawnDelay: 1
+  maxSpawnDelay: 5
   maxEnemiesOnScreen: 10
 --- !u!4 &307649834
 Transform:
@@ -643,7 +643,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1728837902}
-  score: 0
+  spawner: {fileID: 307649833}
+  scoreManager: {fileID: 2082241116}
 --- !u!4 &1145405393
 Transform:
   m_ObjectHideFlags: 0

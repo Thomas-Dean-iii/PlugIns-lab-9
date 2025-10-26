@@ -1,31 +1,43 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class SaveLoadManager : MonoBehaviour
 {
+    [Header("References")]
     public Transform player;
-    //public List<Transform> enemies = new List<Transform>();
-    public int score = 0;
+    public EnemySpawner spawner;
+    public ScoreManager scoreManager;
 
     private TransformSaver transformSaver;
     private ScoreSaver scoreSaver;
 
-    // Start is called before the first frame update
     void Start()
     {
-        // Initialize savers
+        if (player == null)
+            Debug.LogError("SaveLoadManager: Player reference is missing!");
+        if (spawner == null)
+            Debug.LogError("SaveLoadManager: EnemySpawner reference is missing!");
+        if (scoreManager == null)
+            Debug.LogError("SaveLoadManager: ScoreManager reference is missing!");
+
         transformSaver = new TransformSaver(player, "Enemy");
         scoreSaver = new ScoreSaver();
-        scoreSaver.currentScore = score;
+
+        
+        scoreManager.SetScore(0);
+
+        
+        Debug.Log("Starting new game. Score = 0");
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // Update current score in saver
-        scoreSaver.currentScore = score;
+        
+        if (scoreManager != null)
+            scoreSaver.currentScore = scoreManager.GetScore();
 
+        
         if (Input.GetKeyDown(KeyCode.S))
         {
             transformSaver.Save();
@@ -33,13 +45,27 @@ public class SaveLoadManager : MonoBehaviour
             Debug.Log("Game Saved!");
         }
 
+        
         if (Input.GetKeyDown(KeyCode.L))
         {
-            transformSaver.Load();
-            scoreSaver.Load();
-            score = scoreSaver.currentScore;
-            Debug.Log("Game Loaded!" + score);
+            LoadGame();
         }
     }
 
+    private void LoadGame()
+    {
+        if (scoreSaver != null && scoreManager != null)
+        {
+            scoreSaver.Load();                      
+            scoreManager.SetScore(scoreSaver.currentScore); 
+        }
+
+        if (transformSaver != null && spawner != null)
+        {
+            List<Vector3> enemyPositions = transformSaver.LoadEnemyPositions();
+            spawner.LoadEnemies(enemyPositions); 
+        }
+
+        Debug.Log($"Game Loaded! Score: {scoreSaver.currentScore}");
+    }
 }
