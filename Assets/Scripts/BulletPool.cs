@@ -32,7 +32,7 @@ public class BulletPool : MonoBehaviour
         {
             GameObject bullet = bulletPool.Dequeue();
             bullet.SetActive(true);
-            Debug.Log("bullet position" + bullet.transform.position);
+            //Debug.Log("bullet position" + bullet.transform.position);
             return bullet;
         }
         else
